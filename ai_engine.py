@@ -7,6 +7,12 @@ from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.messages import HumanMessage
 from langgraph.graph import StateGraph, END
+from dotenv import load_dotenv
+import os
+
+load_dotenv() 
+
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 class DesignReport(BaseModel):
     quality_summary: str = Field(description="Review of aesthetics, font clarity, and professionalism")
@@ -36,15 +42,14 @@ class AgentState(BaseModel):
     content_report: Optional[ContentReport] = None
     final_score: Optional[FinalScoreCard] = None
 
-llm_text = ChatGroq(model="llama-3.1-70b-versatile", temperature=0)
-llm_vision = ChatGroq(model="llama-3.2-11b-vision-preview", temperature=0)
+llm_text = ChatGroq(model="llama-3.3-70b-versatile", temperature=0)
+llm_vision = ChatGroq(model="meta-llama/llama-4-maverick-17b-128e-instruct", temperature=0)
 
 def encode_image(image_path):
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode('utf-8')
 
 def extract_node(state: AgentState):
-    """Agent 1: Extracts Text & Images from PDF"""
     doc = fitz.open(state.file_path)
     text_content = ""
     img_paths = []
@@ -52,8 +57,7 @@ def extract_node(state: AgentState):
     output_dir = f"temp_images/{state.team_name}"
     os.makedirs(output_dir, exist_ok=True)
     
-    for i, page in enumerate(doc):
-        if i > 5: break 
+    for i, page in enumerate(doc): 
         text_content += page.get_text() + "\n"
         pix = page.get_pixmap(dpi=100)
         img_path = f"{output_dir}/slide_{i}.png"
@@ -63,7 +67,6 @@ def extract_node(state: AgentState):
     return {"raw_text": text_content, "image_paths": img_paths}
 
 def design_eval_node(state: AgentState):
-    """Agent 2: Checks Visual Quality (Vision Model)"""
     selected_images = state.image_paths[:3]
     
     messages = [
@@ -82,7 +85,6 @@ def design_eval_node(state: AgentState):
     return {"design_report": response}
 
 def content_eval_node(state: AgentState):
-    """Agent 3: Checks Logical Content (Text Model)"""
     prompt = ChatPromptTemplate.from_template(
         """
         Analyze this pitch deck text:
@@ -96,7 +98,6 @@ def content_eval_node(state: AgentState):
     return {"content_report": response}
 
 def scoring_node(state: AgentState):
-    """Agent 4: Final Scorer"""
     prompt = ChatPromptTemplate.from_template(
         """
         Act as a Venture Capitalist Judge. Assign scores (0-20) based on these reports.
