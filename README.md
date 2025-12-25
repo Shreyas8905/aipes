@@ -31,6 +31,8 @@ AIPES implements a **Multi-Agent LangGraph Workflow** orchestrated by an asynchr
 
 ![AIPES Architecture](https://github.com/Shreyas8905/aipes/blob/main/dia.png)
 
+_Note: The database and cloudinary part needs to be implemented during deployment._
+
 ---
 
 ## 4. Key Features
