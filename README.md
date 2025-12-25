@@ -81,3 +81,58 @@ ppt_eval_system/
 ├── requirements.txt       # Python dependencies
 └── .env                   # Environment variables (API Keys)
 ```
+
+### File Explanations
+
+* **`main.py`**: The entry point. It initializes the FastAPI server, connects the `Loader` and the `Queue`, and exposes the REST endpoints (e.g., `/test_pipeline`).
+* **`ai_engine.py`**: Contains the **LangGraph** workflow. It defines the Agents (Extractor, Design, Content, Scorer) and the Pydantic models for structured JSON output.
+* **`queue_service.py`**: Manages the `asyncio` event loop. It accepts a list of files and processes them in parallel batches (defined by `concurrency_limit`), handling errors gracefully so one bad file doesn't crash the server.
+* **`loader.py`**: A modular class that fetches files. Currently set to `BatchLoader` (Local), but designed to be easily swapped for `DatabaseLoader` or `CloudinaryLoader`.
+
+---
+
+## 7. How to Run
+
+### Prerequisites
+* Python 3.9+
+* A Groq API Key
+
+### Step 1: Installation
+Clone the repository and install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+### Step 2: Configuration
+
+Create a `.env` file in the root directory:
+
+```plaintext
+GROQ_API_KEY=gsk_your_api_key_here
+```
+
+### Step 3: Add Data
+
+Place your Pitch Deck PDFs into the `test_ppts/` folder.
+
+### Step 4: Run Server
+
+Start the FastAPI server:
+
+```bash
+uvicorn main:app --reload
+```
+
+### Step 5: Trigger Evaluation
+
+Open your browser or Postman and hit:
+`http://127.0.0.1:8000/test_pipeline`
+
+You will see the logs processing files in parallel, and the final response will be a JSON object containing scores and reasoning for every team.
+
+---
+
+## 8. Conclusion
+
+AIPES transforms the subjective, time-consuming task of pitch deck evaluation into an objective, data-driven process. By combining the speed of **Groq**, the structure of **LangGraph**, and the concurrency of **FastAPI**, this system provides a scalable backend solution for modern HackOps platforms.
