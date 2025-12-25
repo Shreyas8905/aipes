@@ -24,7 +24,3 @@ class BatchLoader:
             })
             
         return processed_files
-
-loader = BatchLoader(source_config="test_ppts")
-files = loader.fetch_files()
-print(files)
