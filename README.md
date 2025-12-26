@@ -22,7 +22,7 @@ This system is designed to be the "Brain" of the **HackOps** platform, capable o
 AIPES implements a **Multi-Agent LangGraph Workflow** orchestrated by an asynchronous queuing system:
 
 1.  **Parallelism:** Unlike linear scripts, AIPES splits the PDF into visual and text streams.
-2.  **Specialization:** A "Vision Agent" critiques design while a "Logic Agent" critiques the business model.
+2.  **Specialization:** A "Vision Agent" critiques design while a "Logic Agent" critiques the technicalities & business model.
 3.  **Synthesis:** A final "Judge Agent" aggregates these findings into a 0-20 score with reasoning.
 
 ---
