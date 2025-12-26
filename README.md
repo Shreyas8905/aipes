@@ -135,6 +135,13 @@ You will see the logs processing files in parallel, and the final response will 
 
 ---
 
+
+#### Quick Note
+
+The api endpoint here is open ended and accepts requests from all origins. For this system to be used with backend, proper cors handling must be done for security purpose. Still being faster than traditional scipts based system, the time required for processing will differ from resource to resource and number of PPTs queued. Hence proper time out must be set based on the requirements.
+
+---
+
 ## 8. Conclusion
 
 AIPES transforms the subjective, time-consuming task of pitch deck evaluation into an objective, data-driven process. By combining the speed of **Groq**, the structure of **LangGraph**, and the concurrency of **FastAPI**, this system provides a scalable backend solution for modern HackOps platforms.
