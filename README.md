@@ -64,6 +64,8 @@ The system follows strict software engineering principles (Single Responsibility
 | **PyMuPDF**   | High-speed PDF Extraction |
 | **Pydantic**  | Data Validation & Schema  |
 
+![Backend](https://skillicons.dev/icons?i=py,fastapi)
+
 ---
 
 ## 6. Project Directory Structure
